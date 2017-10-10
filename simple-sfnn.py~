@@ -1,0 +1,8 @@
+'''
+Simple Stochastic Feedforward Neural Network
+W. Ryan Lee
+
+Implementation of a simple, 3-layer MLP using stochastic binary units.
+Uses data augmentation (latent h, weights W) for training/sampling.
+'''
+

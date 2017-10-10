@@ -1,0 +1,108 @@
+'''
+Simple Stochastic Feedforward Neural Network
+W. Ryan Lee
+
+Implementation of a simple, 3-layer MLP using stochastic binary units.
+Uses data augmentation (latent h, weights W) for training/sampling.
+'''
+
+import numpy as np
+from scipy.special import expit
+
+# Stochastic layer definition
+class BinaryLayer:
+    def __init__(self, dim, prevdim):
+        self.h = np.array([0]*dim)
+        self.p = np.array([0]*dim)
+        self.Z = np.array([0]*dim)
+        # Glorot uniform initialization of W
+        r = np.sqrt(6.0/(dim + prevdim))
+        self.W = np.random.uniform(-r, r, (prevdim, dim))
+
+    def forward(self, prev):
+        self.Z = np.dot(prev, self.W)
+        self.p = expit(self.Z)
+        self.h = np.random.binomial(1, self.p)
+        return self.h
+
+    def det_forward(self, prev):
+        self.Z = np.dot(prev, self.W)
+        self.p = expit(self.Z)
+        return self.p
+
+class OutputLayer:
+    def __init__(self, prevdim):
+        self.Z = np.array([0])
+        r = np.sqrt(6.0/(1 + prevdim))
+        self.W = np.random.uniform(-r, r, (prevdim,))
+
+    def forward(self, prev):
+        self.Z = np.dot(prev, self.W)
+        return self.Z
+
+# Model definition
+class SimpleModel:
+    def __init__(self, input_dim = 200, hid_dim = 100, layers = 3):
+        self.layers = [BinaryLayer(hid_dim, input_dim)] # Input layer
+        for i in range(layers - 1):
+            self.layers.append(BinaryLayer(hid_dim, hid_dim)) # Hidden layers
+        self.layers.append(OutputLayer(hid_dim)) # Output layer
+    
+    def forward(self, x):
+        prev = self.layers[0].forward(x)
+        for i in range(1, layers):
+            prev = self.layers[i].forward(prev)
+        self.output = self.layers[layers].forward(prev)
+        return self.output
+
+# Loss functions
+class MSE:
+    def forward(self, pred, true):
+        return (pred - true)**2
+
+    def backward(self, pred, true):
+        return 2*(pred-true)
+
+class CrossEntropy:
+    def forward(self, pred, true):
+        return -sum(true * np.log(pred) + (1-true) * np.log(1-pred))
+    
+    def backward(self, pred, true):
+        return (true - pred) / (pred * (1-pred))
+
+
+'''
+Sample model execution
+'''
+
+# Data loading                                                                                                                          
+X_train = np.load("data/X_train.npy")
+y_train = np.load("data/y_train.npy")
+
+# Model initialization
+epochs = 100
+layers = 3
+input_dim = 50
+hid_dim = 30
+
+model = SimpleModel(input_dim, hid_dim, layers) # Model init
+# Initial h sample
+pred = model.forward(X_train)
+y_loss = MSE()
+grad = y_loss.backward(pred, y_train)
+for l in range(layers, -1, -1):
+    # Backprop
+
+# Training
+#for t in range(epochs):
+    
+
+
+
+# Prediction
+
+
+
+
+
+
