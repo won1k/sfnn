@@ -8,6 +8,7 @@ Uses data augmentation (latent h, weights W) for training/sampling.
 
 import numpy as np
 from scipy.special import expit
+from scipy.stats import norm
 
 # Stochastic layer definition
 class BinaryLayer:
@@ -40,9 +41,20 @@ class OutputLayer:
         self.Z = np.dot(prev, self.W)
         return self.Z
 
+    def det_forward(self, prev):
+        self.Z = np.dot(prev, self.W)
+        return self.Z
+
 # Model definition
 class SimpleModel:
-    def __init__(self, input_dim = 200, hid_dim = 100, layers = 3):
+    def __init__(self, input_dim = 200, hid_dim = 100, layers = 3, step_size = 0.01, sigma = 1):
+        # Initialize hyperparams
+        self.nlayer = layers # total layers = nlayer + 1 (output)
+        self.input_dim = input_dim
+        self.hid_dim = hid_dim
+        self.step_size = step_size
+        self.sigma = sigma
+        # Initialize layers
         self.layers = [BinaryLayer(hid_dim, input_dim)] # Input layer
         for i in range(layers - 1):
             self.layers.append(BinaryLayer(hid_dim, hid_dim)) # Hidden layers
@@ -54,6 +66,44 @@ class SimpleModel:
             prev = self.layers[i].forward(prev)
         self.output = self.layers[layers].forward(prev)
         return self.output
+
+    def backpropAndReject(self, x, y):
+        mse = MSE()
+        ent = CrossEntropy()
+        for l in range(self.nlayer - 1, -1, -1):
+            # Backprop
+            prev = self.layers[l].det_forward(self.layers[l-1].h)
+            pred = self.layers[l+1].det_forward(prev)
+            if l == self.nlayer - 1:
+                grad = mse.backward(pred, y) * self.layers[l+1].W # negative gradient
+            else:
+                res = ent.backward(pred, true)
+                m = len(res)
+                grad = np.array([0]*m)
+                for k in range(m):
+                    grad = grad + res[k] * pred[k] * (1-pred[k]) * self.layers[l+1].W[:,k]
+                grad = (-1) * grad
+            prev = min(max(prev + self.step_size * grad, 0), 1)
+            # Proposal
+            prop = np.random.binomial(1, prev)
+            # Accept-Reject
+            curr = self.layers[l].h
+            next = self.layers[l+1].h
+            proppred = self.layers[l+1].det_forward(prop)
+            pred = self.layers[l+1].det_forward(curr)
+            if l == self.nlayer - 1:
+                logalpha = np.log(norm(proppred, self.sigma).pdf(y) / norm(pred, self.sigma).pdf(y))
+            else:
+                logalpha = 0
+                for j in range(m):
+                    logalpha = logalpha + next[j]*np.log(proppred[j]/pred[j]) + (1-next[j])*np.log((1-proppred[j])/(1-pred[j]))
+            for j in range(m):
+                    logalpha = logalpha + (proppred[j] - pred[j])*np.log(prev[j]) + (pred[j] - proppred[j])*np.log(1-prev[j])
+            if np.log(np.random.uniform()) < logalpha:
+                self.layers[l].h = prop
+            
+            
+        
 
 # Loss functions
 class MSE:

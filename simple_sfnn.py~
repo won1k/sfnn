@@ -16,7 +16,7 @@ class BinaryLayer:
         self.p = np.array([0]*dim)
         self.Z = np.array([0]*dim)
         # Glorot uniform initialization of W
-        r = np.sqrt(6/(dim + prevdim))
+        r = np.sqrt(6.0/(dim + prevdim))
         self.W = np.random.uniform(-r, r, (prevdim, dim))
 
     def forward(self, prev):
@@ -30,13 +30,23 @@ class BinaryLayer:
         self.p = expit(self.Z)
         return self.p
 
+class OutputLayer:
+    def __init__(self, prevdim):
+        self.Z = np.array([0])
+        r = np.sqrt(6.0/(1 + prevdim))
+        self.W = np.random.uniform(-r, r, (prevdim,))
+
+    def forward(self, prev):
+        self.Z = np.dot(prev, self.W)
+        return self.Z
+
 # Model definition
 class SimpleModel:
     def __init__(self, input_dim = 200, hid_dim = 100, layers = 3):
         self.layers = [BinaryLayer(hid_dim, input_dim)] # Input layer
         for i in range(layers - 1):
             self.layers.append(BinaryLayer(hid_dim, hid_dim)) # Hidden layers
-        self.layers.append(BinaryLayer(1, hid_dim)) # Output layer
+        self.layers.append(OutputLayer(hid_dim)) # Output layer
     
     def forward(self, x):
         prev = self.layers[0].forward(x)
@@ -47,17 +57,17 @@ class SimpleModel:
 
 # Loss functions
 class MSE:
-    def forward(pred, true):
+    def forward(self, pred, true):
         return (pred - true)**2
 
-    def backward(pred, true):
+    def backward(self, pred, true):
         return 2*(pred-true)
 
 class CrossEntropy:
-    def forward(pred, true):
+    def forward(self, pred, true):
         return -sum(true * np.log(pred) + (1-true) * np.log(1-pred))
     
-    def backward(pred, true):
+    def backward(self, pred, true):
         return (true - pred) / (pred * (1-pred))
 
 
@@ -80,9 +90,11 @@ model = SimpleModel(input_dim, hid_dim, layers) # Model init
 pred = model.forward(X_train)
 y_loss = MSE()
 grad = y_loss.backward(pred, y_train)
+for l in range(layers, -1, -1):
+    # Backprop
 
 # Training
-for t in range(epochs):
+#for t in range(epochs):
     
 
 
