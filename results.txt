@@ -1,0 +1,300 @@
+Epoch 0:
+H Acceptance Proportion: 0.822333333333
+Prediction R2: 0.231470707988
+Epoch: 1
+H Acceptance Proportion: 0.601666666667
+Prediction R2: 0.278881339051
+Epoch: 2
+H Acceptance Proportion: 0.475333333333
+Prediction R2: 0.289624336076
+Epoch: 3
+H Acceptance Proportion: 0.434666666667
+Prediction R2: 0.34350499178
+Epoch: 4
+H Acceptance Proportion: 0.390333333333
+Prediction R2: 0.387228834903
+Epoch: 5
+H Acceptance Proportion: 0.360666666667
+Prediction R2: 0.424472790926
+Epoch: 6
+H Acceptance Proportion: 0.355333333333
+Prediction R2: 0.397240859666
+Epoch: 7
+H Acceptance Proportion: 0.333333333333
+Prediction R2: 0.366492161411
+Epoch: 8
+H Acceptance Proportion: 0.34
+Prediction R2: 0.425471807076
+Epoch: 9
+H Acceptance Proportion: 0.308
+Prediction R2: 0.419953956566
+Epoch: 10
+H Acceptance Proportion: 0.300333333333
+Prediction R2: 0.489327318235
+Epoch: 11
+H Acceptance Proportion: 0.297333333333
+Prediction R2: 0.538710065655
+Epoch: 12
+H Acceptance Proportion: 0.302
+Prediction R2: 0.491730873203
+Epoch: 13
+H Acceptance Proportion: 0.306666666667
+Prediction R2: 0.538465125446
+Epoch: 14
+H Acceptance Proportion: 0.282
+Prediction R2: 0.579658088843
+Epoch: 15
+H Acceptance Proportion: 0.282666666667
+Prediction R2: 0.587265365383
+Epoch: 16
+H Acceptance Proportion: 0.300333333333
+Prediction R2: 0.61326963252
+Epoch: 17
+H Acceptance Proportion: 0.283333333333
+Prediction R2: 0.634075132856
+Epoch: 18
+H Acceptance Proportion: 0.287333333333
+Prediction R2: 0.688573040188
+Epoch: 19
+H Acceptance Proportion: 0.286333333333
+Prediction R2: 0.654937003718
+Epoch: 20
+H Acceptance Proportion: 0.291333333333
+Prediction R2: 0.73049752773
+Epoch: 21
+H Acceptance Proportion: 0.296
+Prediction R2: 0.652003210843
+Epoch: 22
+H Acceptance Proportion: 0.282
+Prediction R2: 0.719545233934
+Epoch: 23
+H Acceptance Proportion: 0.294666666667
+Prediction R2: 0.651954433893
+Epoch: 24
+H Acceptance Proportion: 0.289666666667
+Prediction R2: 0.668197078436
+Epoch: 25
+H Acceptance Proportion: 0.284
+Prediction R2: 0.76396344321
+Epoch: 26
+H Acceptance Proportion: 0.291666666667
+Prediction R2: 0.760530466781
+Epoch: 27
+H Acceptance Proportion: 0.28
+Prediction R2: 0.732742926933
+Epoch: 28
+H Acceptance Proportion: 0.283
+Prediction R2: 0.684130961351
+Epoch: 29
+H Acceptance Proportion: 0.285
+Prediction R2: 0.710443261593
+Epoch: 30
+H Acceptance Proportion: 0.272
+Prediction R2: 0.661188438925
+Epoch: 31
+H Acceptance Proportion: 0.272666666667
+Prediction R2: 0.696057315099
+Epoch: 32
+H Acceptance Proportion: 0.275666666667
+Prediction R2: 0.694763746682
+Epoch: 33
+H Acceptance Proportion: 0.278333333333
+Prediction R2: 0.774475816032
+Epoch: 34
+H Acceptance Proportion: 0.272666666667
+Prediction R2: 0.75203517735
+Epoch: 35
+H Acceptance Proportion: 0.261333333333
+Prediction R2: 0.741642323717
+Epoch: 36
+H Acceptance Proportion: 0.272333333333
+Prediction R2: 0.721888424105
+Epoch: 37
+H Acceptance Proportion: 0.273
+Prediction R2: 0.744933189551
+Epoch: 38
+H Acceptance Proportion: 0.26
+Prediction R2: 0.732183321548
+Epoch: 39
+H Acceptance Proportion: 0.271333333333
+Prediction R2: 0.728676869502
+Epoch: 40
+H Acceptance Proportion: 0.272666666667
+Prediction R2: 0.718044644642
+Epoch: 41
+H Acceptance Proportion: 0.268333333333
+Prediction R2: 0.690993370283
+Epoch: 42
+H Acceptance Proportion: 0.27
+Prediction R2: 0.733482576139
+Epoch: 43
+H Acceptance Proportion: 0.266333333333
+Prediction R2: 0.746903392207
+Epoch: 44
+H Acceptance Proportion: 0.282
+Prediction R2: 0.779494695865
+Epoch: 45
+H Acceptance Proportion: 0.263333333333
+Prediction R2: 0.748300230906
+Epoch: 46
+H Acceptance Proportion: 0.266666666667
+Prediction R2: 0.750817758931
+Epoch: 47
+H Acceptance Proportion: 0.276
+Prediction R2: 0.73953345041
+Epoch: 48
+H Acceptance Proportion: 0.272
+Prediction R2: 0.715774519415
+Epoch: 49
+H Acceptance Proportion: 0.269
+Prediction R2: 0.68245560789
+Epoch: 50
+H Acceptance Proportion: 0.269333333333
+Prediction R2: 0.804930213997
+Epoch: 51
+H Acceptance Proportion: 0.275333333333
+Prediction R2: 0.764334780079
+Epoch: 52
+H Acceptance Proportion: 0.255333333333
+Prediction R2: 0.766884726558
+Epoch: 53
+H Acceptance Proportion: 0.284666666667
+Prediction R2: 0.837298596897
+Epoch: 54
+H Acceptance Proportion: 0.272333333333
+Prediction R2: 0.690784153998
+Epoch: 55
+H Acceptance Proportion: 0.267666666667
+Prediction R2: 0.73207269405
+Epoch: 56
+H Acceptance Proportion: 0.269
+Prediction R2: 0.802720305439
+Epoch: 57
+H Acceptance Proportion: 0.268
+Prediction R2: 0.801503766249
+Epoch: 58
+H Acceptance Proportion: 0.265333333333
+Prediction R2: 0.830379296448
+Epoch: 59
+H Acceptance Proportion: 0.266333333333
+Prediction R2: 0.810808837352
+Epoch: 60
+H Acceptance Proportion: 0.256666666667
+Prediction R2: 0.767313914359
+Epoch: 61
+H Acceptance Proportion: 0.270333333333
+Prediction R2: 0.804757659421
+Epoch: 62
+H Acceptance Proportion: 0.265666666667
+Prediction R2: 0.73706108526
+Epoch: 63
+H Acceptance Proportion: 0.264333333333
+Prediction R2: 0.73070968381
+Epoch: 64
+H Acceptance Proportion: 0.270333333333
+Prediction R2: 0.772640016293
+Epoch: 65
+H Acceptance Proportion: 0.266333333333
+Prediction R2: 0.786051526944
+Epoch: 66
+H Acceptance Proportion: 0.264333333333
+Prediction R2: 0.76211058754
+Epoch: 67
+H Acceptance Proportion: 0.257333333333
+Prediction R2: 0.748974317839
+Epoch: 68
+H Acceptance Proportion: 0.264333333333
+Prediction R2: 0.824366282339
+Epoch: 69
+H Acceptance Proportion: 0.254333333333
+Prediction R2: 0.825446311451
+Epoch: 70
+H Acceptance Proportion: 0.261333333333
+Prediction R2: 0.80690508905
+Epoch: 71
+H Acceptance Proportion: 0.256333333333
+Prediction R2: 0.794177312037
+Epoch: 72
+H Acceptance Proportion: 0.269333333333
+Prediction R2: 0.763822638403
+Epoch: 73
+H Acceptance Proportion: 0.257333333333
+Prediction R2: 0.753333850483
+Epoch: 74
+H Acceptance Proportion: 0.261
+Prediction R2: 0.728763803904
+Epoch: 75
+H Acceptance Proportion: 0.255666666667
+Prediction R2: 0.860031512771
+Epoch: 76
+H Acceptance Proportion: 0.262
+Prediction R2: 0.828771410698
+Epoch: 77
+H Acceptance Proportion: 0.262
+Prediction R2: 0.770225598774
+Epoch: 78
+H Acceptance Proportion: 0.265333333333
+Prediction R2: 0.837611160687
+Epoch: 79
+H Acceptance Proportion: 0.261666666667
+Prediction R2: 0.842920860844
+Epoch: 80
+H Acceptance Proportion: 0.263333333333
+Prediction R2: 0.844873292983
+Epoch: 81
+H Acceptance Proportion: 0.278666666667
+Prediction R2: 0.905431049819
+Epoch: 82
+H Acceptance Proportion: 0.270333333333
+Prediction R2: 0.859837540518
+Epoch: 83
+H Acceptance Proportion: 0.257666666667
+Prediction R2: 0.815132655058
+Epoch: 84
+H Acceptance Proportion: 0.27
+Prediction R2: 0.851698225575
+Epoch: 85
+H Acceptance Proportion: 0.281666666667
+Prediction R2: 0.845086697024
+Epoch: 86
+H Acceptance Proportion: 0.262666666667
+Prediction R2: 0.882389316553
+Epoch: 87
+H Acceptance Proportion: 0.28
+Prediction R2: 0.858985012974
+Epoch: 88
+H Acceptance Proportion: 0.255666666667
+Prediction R2: 0.866925100194
+Epoch: 89
+H Acceptance Proportion: 0.267
+Prediction R2: 0.78114927956
+Epoch: 90
+H Acceptance Proportion: 0.260333333333
+Prediction R2: 0.826727922769
+Epoch: 91
+H Acceptance Proportion: 0.265333333333
+Prediction R2: 0.858650069681
+Epoch: 92
+H Acceptance Proportion: 0.283
+Prediction R2: 0.877907226022
+Epoch: 93
+H Acceptance Proportion: 0.281666666667
+Prediction R2: 0.832644898527
+Epoch: 94
+H Acceptance Proportion: 0.289666666667
+Prediction R2: 0.90662729674
+Epoch: 95
+H Acceptance Proportion: 0.278
+Prediction R2: 0.858222995293
+Epoch: 96
+H Acceptance Proportion: 0.281333333333
+Prediction R2: 0.853615015621
+Epoch: 97
+H Acceptance Proportion: 0.270666666667
+Prediction R2: 0.934717892993
+Epoch: 98
+H Acceptance Proportion: 0.267666666667
+Prediction R2: 0.852410175941
+Epoch: 99
+H Acceptance Proportion: 0.273
+Prediction R2: 0.911810641313

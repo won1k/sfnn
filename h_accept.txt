@@ -1,0 +1,42 @@
+Epoch: 0
+2485
+Epoch: 1
+1724
+Epoch: 2
+1544
+Epoch: 3
+1441
+Epoch: 4
+1376
+Epoch: 5
+1364
+Epoch: 6
+1254
+Epoch: 7
+1108
+Epoch: 8
+1095
+Epoch: 9
+1080
+Epoch: 10
+1061
+Epoch: 11
+1008
+Epoch: 12
+997
+Epoch: 13
+977
+Epoch: 14
+960
+Epoch: 15
+944
+Epoch: 16
+925
+Epoch: 17
+1001
+Epoch: 18
+972
+Epoch: 19
+956
+Epoch: 20
+971
