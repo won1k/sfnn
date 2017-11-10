@@ -146,37 +146,38 @@ class SimpleModel:
 
     def logisticAndReject(self, X, Y):
         pg = PyPolyaGamma() # use N(0, I) prior
+        n = X.shape[0]
         # Output layer
         out_fit = LinearRegression(fit_intercept = False).fit(self.layers[self.nlayer-1].h, Y)
         self.layers[self.nlayer].W = out_fit.coef_
         # Hidden layers
-        for l in range(self.nlayer - 1, 0, -1):
-            for j in range(self.hid_dim):
+        #for l in range(self.nlayer - 1, 0, -1):
+        #    for j in range(self.hid_dim):
                 # Draw prior beta
-                prior = np.random.normal(0, 1, size = self.hid_dim)
+                #prior = np.random.normal(0, 1, size = self.hid_dim)
                 # Draw latent w
-                w = np.zeros(self.hid_dim)
-                for k in range(self.hid_dim):
-                    w[k] = pg.pgdraw(1, np.dot(self.layers[l-1].h[k,:], prior))
+                #w = np.zeros(n)
+                #for k in range(n):
+                #    w[k] = pg.pgdraw(1, np.dot(self.layers[l-1].h[k,:], prior))
                 # Draw posterior beta
-                kappa = self.layers[l].h[:,j] - 0.5
-                omega = np.diag(w)
-                Vw = np.linalg.inv(np.dot(np.dot(np.transpose(self.layers[l].h), omega), self.layers[l].h) + np.eye(self.hid_dim))
-                mw = np.dot(Vw, np.dot(np.transpose(self.layers[l].h), kappa))
-                self.layers[l].W[:,j] = np.random.multivariate_normal(mw, Vw)
+                #kappa = self.layers[l].h[:,j] - 0.5
+                #omega = np.diag(w)
+                #Vw = np.linalg.inv(np.dot(np.dot(np.transpose(self.layers[l].h), omega), self.layers[l].h) + np.eye(self.hid_dim))
+                #mw = np.dot(Vw, np.dot(np.transpose(self.layers[l].h), kappa))
+                #self.layers[l].W[:,j] = np.random.multivariate_normal(mw, Vw)
                 
             # Propose
-            #propW = np.zeros(self.layers[l].W.shape)
-            #logalpha = 0
-            #for j in range(self.hid_dim):
-                #hid_fit = LogisticRegression(fit_intercept = False).fit(self.layers[l-1].h, self.layers[l].h[:,j])
-                #propW[:,j] = hid_fit.coef_ + np.random.normal(size = len(propW[:,j]))
-                #prop_hW = expit(np.dot(self.layers[l-1].h, propW[:,j]))
-                #curr_hW = expit(np.dot(self.layers[l-1].h, self.layers[l].W[:,j]))
+            propW = np.zeros(self.layers[l].W.shape)
+            logalpha = 0
+            for j in range(self.hid_dim):
+                hid_fit = LogisticRegression(fit_intercept = False).fit(self.layers[l-1].h, self.layers[l].h[:,j])
+                propW[:,j] = hid_fit.coef_ + np.random.normal(size = len(propW[:,j]))
+                prop_hW = expit(np.dot(self.layers[l-1].h, propW[:,j]))
+                curr_hW = expit(np.dot(self.layers[l-1].h, self.layers[l].W[:,j]))
                 # Accept-Reject
-                #logalpha = sum(self.layers[l].h[:,j] * np.log(prop_hW/curr_hW) + (1-self.layers[l].h[:,j]) * np.log((1-prop_hW)/(1-curr_hW)))
-                #if np.log(np.random.uniform()) < logalpha:
-                    #self.layers[l].W[:,j] = propW[:,j]
+                logalpha = sum(self.layers[l].h[:,j] * np.log(prop_hW/curr_hW) + (1-self.layers[l].h[:,j]) * np.log((1-prop_hW)/(1-curr_hW)))
+                if np.log(np.random.uniform()) < logalpha:
+                    self.layers[l].W[:,j] = propW[:,j]
                                
 
 # Loss functions
@@ -229,9 +230,12 @@ for t in range(epochs):
     # Prediction
     bary = np.mean(y_train)
     ssr = 0.0
+    sse = 0.0
     sst = 0.0
     for i in range(train_size):
         pred = model.pred_forward(X_train[i])
-        ssr += (y_train[i] - pred)**2
+        ssr += (pred - bary)**2
+        sse += (y_train[i] - pred)**2
         sst += (y_train[i] - bary)**2
     print "Prediction R2: " + str(ssr/sst)
+    print "Prediction Error: " + str(sse/sst)
