@@ -19,6 +19,9 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 def lognorm(x, mu, sigma):
     return -(x-mu)**2/(2*sigma**2)
 
+def logbern(y, p):
+    return y*np.log(p) + (1-y)*np.log(1-p)
+
 def permute(curr):
     d = len(curr)
     i,j = random.sample(range(d), 2)
@@ -57,26 +60,27 @@ class BinaryLayer:
 
 class OutputLayer:
     def __init__(self, prevdim, n):
+        self.p = np.array([0.0]*n)
         self.Z = np.array([0.0]*n)
         r = np.sqrt(6.0/(1 + prevdim))
         self.W = np.random.uniform(-r, r, (prevdim,))
 
     def forward(self, prev, i):
         self.Z[i] = np.dot(prev, self.W)
-        return self.Z[i]
+        self.p[i] = expit(Z)
+        return self.p[i]
 
     def det_forward(self, prev, i):
-        #print(self.W.shape)
-        self.Z[i] = np.dot(prev, self.W)
-        return self.Z[i]
-
+        return self.forward(prev, i)
+    
     def pred_forward(self, prev):
         Z = np.dot(prev, self.W)
-        return Z
+        p = expit(Z)
+        return p
 
 # Model definition
 class SimpleModel:
-    def __init__(self, input_dim = 200, train_size = 100, hid_dim = 100, layers = 3, step_size = 0.01, sigma = 1):
+    def __init__(self, input_dim = 200, train_size = 100, hid_dim = 100, layers = 3, mc_iter = 10, step_size = 0.01, sigma = 1):
         # Initialize hyperparams
         self.nlayer = layers # total layers = nlayer + 1 (output)
         self.input_dim = input_dim
@@ -84,6 +88,7 @@ class SimpleModel:
         self.step_size = step_size
         self.sigma = sigma
         self.train_size = train_size
+        self.mc_iter = mc_iter
         # Initialize layers
         self.layers = [BinaryLayer(hid_dim, input_dim, train_size)] # Input layer
         for i in range(layers - 1):
@@ -165,35 +170,37 @@ class SimpleModel:
         self.layers[self.nlayer].W[:,0] = np.random.normal(mw, Vw)
         # Hidden layers
         for l in range(self.nlayer - 1, 0, -1):
-            #for j in range(self.hid_dim):
+            for j in range(self.hid_dim):
                 # Draw prior beta
-                #prior = np.random.normal(0, 1, size = self.hid_dim)
-                # Draw latent w
-                #w = np.zeros(n)
-                #for k in range(n):
-                #    w[k] = pg.pgdraw(1, np.dot(self.layers[l-1].h[k,:], prior))
-                # Draw posterior beta
-                #kappa = self.layers[l].h[:,j] - 0.5
-                #omega = np.diag(w)
-                #Vw = np.linalg.inv(np.dot(np.dot(np.transpose(self.layers[l].h), omega), self.layers[l].h) + np.eye(self.hid_dim))
-                #mw = np.dot(Vw, np.dot(np.transpose(self.layers[l].h), kappa))
-                #self.layers[l].W[:,j] = np.random.multivariate_normal(mw, Vw)
+                curr = np.random.normal(0, 1, size = self.hid_dim)
+                for t in range(self.mc_iter):
+                    # Draw latent w
+                    w = np.zeros(n)
+                    for k in range(n):
+                        w[k] = pg.pgdraw(1, np.dot(self.layers[l-1].h[k,:], curr))
+                    # Draw posterior beta
+                    kappa = self.layers[l].h[:,j] - 0.5
+                    omega = np.diag(w)
+                    Vw = np.linalg.inv(np.dot(np.dot(np.transpose(self.layers[l].h), omega), self.layers[l].h) + np.eye(self.hid_dim))
+                    mw = np.dot(Vw, np.dot(np.transpose(self.layers[l].h), kappa))
+                    curr = np.random.multivariate_normal(mw, Vw)
+                self.layers[l].W[:,j] = curr
                 
             # Propose
-            propW = np.zeros(self.layers[l].W.shape)
-            logalpha = 0
-            for j in range(self.hid_dim):
-                hid_fit = LogisticRegression(fit_intercept = False).fit(self.layers[l-1].h, self.layers[l].h[:,j])
-                propW[:,j] = hid_fit.coef_ + np.random.normal(size = len(propW[:,j]))
-                prop_hW = expit(np.dot(self.layers[l-1].h, propW[:,j]))
-                curr_hW = expit(np.dot(self.layers[l-1].h, self.layers[l].W[:,j]))
+            #propW = np.zeros(self.layers[l].W.shape)
+            #logalpha = 0
+            #for j in range(self.hid_dim):
+            #    hid_fit = LogisticRegression(fit_intercept = False).fit(self.layers[l-1].h, self.layers[l].h[:,j])
+            #    propW[:,j] = hid_fit.coef_ + np.random.normal(size = len(propW[:,j]))
+            #    prop_hW = expit(np.dot(self.layers[l-1].h, propW[:,j]))
+            #    curr_hW = expit(np.dot(self.layers[l-1].h, self.layers[l].W[:,j]))
                 # Accept-Reject
-                logalpha = sum(self.layers[l].h[:,j] * np.log(prop_hW/curr_hW) + (1-self.layers[l].h[:,j]) * np.log((1-prop_hW)/(1-curr_hW)))
-                if np.log(np.random.uniform()) < logalpha:
-                    self.layers[l].W[:,j] = propW[:,j]
+            #    logalpha = sum(self.layers[l].h[:,j] * np.log(prop_hW/curr_hW) + (1-self.layers[l].h[:,j]) * np.log((1-prop_hW)/(1-curr_hW)))
+            #    if np.log(np.random.uniform()) < logalpha:
+            #        self.layers[l].W[:,j] = propW[:,j]
                                
 
-    def hAndReject(self, x, y, i):
+    def permAndReject(self, x, y, i):
         accept = 0
         for l in range(self.nlayer - 1, 0, -1):
             curr = self.layers[l].h[i]
@@ -243,6 +250,32 @@ class SimpleModel:
                 self.layers[l].h[i] = prop[l]
         return accept
 
+    def flipAndReject(self, x, y, i):
+        accept = 0
+        for l in range(0, self.nlayer):
+            if l == 0:
+                curr_probs = self.layers[0].det_forward(x, i)
+            else:
+                curr_probs = self.layers[l].det_forward(self.layers[l-1].h[i], i)
+            for j in range(self.hid_dim):
+                prop_h = self.layers[l].h[i]
+                prop_h[j] = 1 - prop_h[j]
+                next_probs_prop = self.layers[l+1].det_forward(prop_h, i)
+                next_probs_curr = self.layers[l+1].det_forward(self.layers[l].h[i], i)
+                logalpha = logbern(prop_h[j], curr_probs[j]) - logbern(1 - prop_h[j], curr_probs[j])
+                if l == self.nlayer-1:
+                    logalpha += logbern(y, next_probs_prop)
+                    logalpha -= logbern(y, next_probs_curr)
+                else:
+                    for k in range(self.hid_dim):
+                        logalpha += logbern(self.layers[l+1].h[i,k], next_probs_prop[k])
+                        logalpha -= logbern(self.layers[l+1].h[i,k], next_probs_curr[k])
+                if np.log(np.random.uniform()) < logalpha:
+                    self.layers[l].h[i,j] = 1 - self.layers[l].h[i,j]
+                    accept += 1
+        return accept
+
+
 
 
 # Loss functions
@@ -272,11 +305,16 @@ y_train = np.load("data/y_train_cat.npy")
 # Model initialization
 train_size = len(X_train)
 epochs = 1000
+<<<<<<< HEAD
+layers = 2
+=======
+mc_iter = 10
 layers = 3
+>>>>>>> 01348ab4368f3364e76e82fed5676fece3d19f12
 input_dim = 50
-hid_dim = 30
+hid_dim = 10
 
-model = SimpleModel(input_dim, train_size, hid_dim, layers) # Model init
+model = SimpleModel(input_dim, train_size, hid_dim, layers, mc_iter) # Model init
 
 # Training/Sampling
 # Initial h sample
@@ -289,10 +327,11 @@ for t in range(epochs):
     a = 0 # number of accepts each epoch
     for i in range(train_size):
         #a += model.indepAndReject(X_train[i], y_train[i], i)
-        #a += model.hAndReject(X_train[i], y_train[i], i)
-        a += model.backpropAndReject(X_train[i], y_train[i], i) # h update for each obs
+        #a += model.permAndReject(X_train[i], y_train[i], i)
+        #a += model.backpropAndReject(X_train[i], y_train[i], i) # h update for each obs
+        a += model.flipAndReject(X_train[i], y_train[i], i)
     model.logisticAndReject(X_train, y_train) # W update using all obs
-    print "H Acceptance Proportion: " + str(float(a)/train_size)
+    print "H Acceptance Proportion: " + str(float(a)/(train_size*layers*hid_dim))
     
     # Prediction
     correct = 0
