@@ -272,9 +272,9 @@ y_train = np.load("data/y_train_cat.npy")
 # Model initialization
 train_size = len(X_train)
 epochs = 1000
-layers = 3
+layers = 2
 input_dim = 50
-hid_dim = 30
+hid_dim = 10
 
 model = SimpleModel(input_dim, train_size, hid_dim, layers) # Model init
 

@@ -126,7 +126,7 @@ class SimpleModel:
                 #for k in range(m):
                 #    grad = grad + res[k] * pred[k] * (1-pred[k]) * self.layers[l+1].W[:,k]
             grad = (-1) * grad
-            prev = [min(max(t, 0.001), 0.999) for t in prev + self.step_size * grad]
+            prev = [min(max(t, 0.001), 0.999) for t in (prev + self.step_size * grad)]
             # Proposal
             prop = np.random.binomial(1, prev)
             # Accept-Reject
